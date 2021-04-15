@@ -17,7 +17,7 @@ import ru.denfad.rover.map.Command;
 
 public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandViewHolder> {
 
-    List<Command> commands;
+    private List<Command> commands;
     public MyListAdapter(List<Command> commands){
         this.commands = commands;
     }
@@ -31,12 +31,20 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandVie
 
     @Override
     public void onBindViewHolder(@NonNull CommandViewHolder holder, int position) {
-
+        commands.set(position,holder.command);
     }
 
     @Override
     public int getItemCount() {
         return commands.size();
+    }
+
+    public List<Command> getCommands() {
+        return commands;
+    }
+
+    public void setCommands(List<Command> commands) {
+        this.commands = commands;
     }
 
     public static  class CommandViewHolder extends RecyclerView.ViewHolder{
@@ -60,7 +68,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandVie
             less.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    command.setDistance(command.getDistance() - 1);
+                    command.setDistance(command.getDistance() - 50);
                     distance.setText(String.valueOf(command.getDistance()));
                 }
             });
@@ -68,7 +76,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandVie
             more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    command.setDistance(command.getDistance() + 1);
+                    command.setDistance(command.getDistance() +50);
                     distance.setText(String.valueOf(command.getDistance()));
                 }
             });

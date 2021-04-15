@@ -1,5 +1,7 @@
 package ru.denfad.rover.map;
 
+import java.util.List;
+
 public class Grid {
     private int height,width;
     private Rover rover;
@@ -12,6 +14,11 @@ public class Grid {
 
     public Rover executeCommand(Command command){
         rover.executeCommand(command);
+        return rover;
+    }
+
+    public Rover executeCommands(List<Command> commands){
+        rover.executeCommands(commands);
         return rover;
     }
 
