@@ -18,20 +18,23 @@ import ru.denfad.rover.map.Command;
 public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandViewHolder> {
 
     private List<Command> commands;
-    public MyListAdapter(List<Command> commands){
+
+    public MyListAdapter(List<Command> commands) {
         this.commands = commands;
     }
+
     @NonNull
     @Override
     public CommandViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item, parent, false);
         CommandViewHolder cvh = new CommandViewHolder(v);
         return cvh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommandViewHolder holder, int position) {
-        commands.set(position,holder.command);
+       // holder.angle.setText(commands.get(position).getAngleS());
+        //holder.distance.setText(String.valueOf(commands.get(position).getDistance()));
     }
 
     @Override
@@ -47,56 +50,15 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandVie
         this.commands = commands;
     }
 
-    public static  class CommandViewHolder extends RecyclerView.ViewHolder{
-        Button changeAngle;
-        Button less;
-        Button more;
+    public static class CommandViewHolder extends RecyclerView.ViewHolder {
+
         TextView distance;
-        Command command;
-        int[] angles = {0,90,180,270};
-        String[] strAngles = {"вправо","вниз","влево","вверх"};
-        int i = 0;
-        CommandViewHolder(View itemView){
+        TextView angle;
+
+        CommandViewHolder(View itemView) {
             super(itemView);
-            changeAngle = itemView.findViewById(R.id.change_angle);
-            less = itemView.findViewById(R.id.less);
-            more = itemView.findViewById(R.id.more);
+            angle = itemView.findViewById(R.id.angle);
             distance = itemView.findViewById(R.id.distance);
-            distance.setText("1");
-            command = new Command(1,270);
-
-            less.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    command.setDistance(command.getDistance() - 50);
-                    distance.setText(String.valueOf(command.getDistance()));
-                }
-            });
-
-            more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    command.setDistance(command.getDistance() +50);
-                    distance.setText(String.valueOf(command.getDistance()));
-                }
-            });
-
-            changeAngle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if(i!=4){
-                        command.setAngle(angles[i]);
-                        changeAngle.setText(strAngles[i]);
-                        i++;
-                    }
-                    else{
-                        i=0;
-                        changeAngle.setText(strAngles[i]);
-                        command.setAngle(angles[i]);
-                    }
-                }
-            });
         }
     }
 

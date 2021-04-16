@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import ru.denfad.rover.map.Command;
 import ru.denfad.rover.map.GlobalFields;
 import ru.denfad.rover.map.Grid;
+import ru.denfad.rover.map.MoveCommand;
+import ru.denfad.rover.map.RotateCommand;
 import ru.denfad.rover.map.Rover;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         roverImage.setImageResource(R.drawable.rover_image);
 
         map.addView(roverImage);
-        this.grid = new Grid(width,height,(Rover)roverImage);
+        this.grid = new Grid((Rover)roverImage);
 
         //элементы упавления
         Button left = findViewById(R.id.left);
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //лево 180
-                grid.executeCommand(new Command(100,180));
+                grid.executeCommand(new RotateCommand(-90));
 
             }
         });
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //право 0
-                grid.executeCommand(new Command(100,0));
+                grid.executeCommand(new RotateCommand(90));
 
             }
         });
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //вверх 270
-                grid.executeCommand(new Command(100,270));
+                grid.executeCommand(new MoveCommand(100));
 
             }
         });
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //вниз 90
-                grid.executeCommand(new Command(100,90));
+                grid.executeCommand(new MoveCommand(-100));
 
             }
         });

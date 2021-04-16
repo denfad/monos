@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProgrammingActivity"
-                android:screenOrientation="sensorLandscape">>
+                android:screenOrientation="portrait">>
 
         </activity>
     </application>

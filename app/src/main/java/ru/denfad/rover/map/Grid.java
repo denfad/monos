@@ -3,12 +3,10 @@ package ru.denfad.rover.map;
 import java.util.List;
 
 public class Grid {
-    private int height,width;
+    private final int height =70,width = 130;
     private Rover rover;
 
-    public Grid(int width, int height, Rover rover){
-        this.height = height;
-        this.width =  width;
+    public Grid(Rover rover){
         this.rover = rover;
     }
 
