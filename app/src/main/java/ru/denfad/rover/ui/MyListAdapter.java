@@ -3,19 +3,19 @@ package ru.denfad.rover.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.denfad.rover.R;
 import ru.denfad.rover.map.Command;
+import ru.denfad.rover.map.MoveCommand;
+import ru.denfad.rover.map.RotateCommand;
 
-public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandViewHolder> {
+public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Command> commands;
 
@@ -25,16 +25,54 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandVie
 
     @NonNull
     @Override
-    public CommandViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item, parent, false);
-        CommandViewHolder cvh = new CommandViewHolder(v);
-        return cvh;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType){
+            case 1:
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_rotate, parent, false);
+                return new RotateViewHolder(v);
+            case 2:
+                View V = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_move, parent, false);
+                return  new MoveViewHolder(V);
+            default:
+                return null;
+
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommandViewHolder holder, int position) {
-       // holder.angle.setText(commands.get(position).getAngleS());
-        //holder.distance.setText(String.valueOf(commands.get(position).getDistance()));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+       switch (holder.getItemViewType()){
+           case 1:
+               RotateViewHolder c1 = (RotateViewHolder) holder;
+               if(((RotateCommand)commands.get(position)).getDangle() == 90){
+                   c1.angle.setText("Поворот направо");
+               }
+               else{
+                   c1.angle.setText("Поворот налево");
+               }
+               break;
+           case 2:
+               MoveViewHolder c2 = (MoveViewHolder) holder;
+               if(((MoveCommand)commands.get(position)).getDistance() < 0){
+                   c2.angle.setText("Назад");
+                   c2.distance.setText(String.valueOf(-((MoveCommand)commands.get(position)).getDistance()));
+               }
+               else{
+                   c2.angle.setText("Вперед");
+                   c2.distance.setText(String.valueOf(((MoveCommand)commands.get(position)).getDistance()));
+               }
+       }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(commands.get(position) instanceof RotateCommand){
+            return 1;
+        }
+        else{
+            return 2;
+        }
     }
 
     @Override
@@ -50,12 +88,22 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.CommandVie
         this.commands = commands;
     }
 
-    public static class CommandViewHolder extends RecyclerView.ViewHolder {
+    public static class RotateViewHolder extends RecyclerView.ViewHolder {
+
+        TextView angle;
+
+        RotateViewHolder(View itemView) {
+            super(itemView);
+            angle = itemView.findViewById(R.id.angle);
+        }
+    }
+
+    public static class MoveViewHolder extends RecyclerView.ViewHolder {
 
         TextView distance;
         TextView angle;
 
-        CommandViewHolder(View itemView) {
+        MoveViewHolder(View itemView) {
             super(itemView);
             angle = itemView.findViewById(R.id.angle);
             distance = itemView.findViewById(R.id.distance);

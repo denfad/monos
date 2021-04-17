@@ -6,7 +6,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -17,7 +19,7 @@ public class Rover extends androidx.appcompat.widget.AppCompatImageView {
     private int y;
     private int angle = 270;
 
-    public Rover(int x, int y, Context context, int width, int height){
+    public Rover(int x, int y, Context context,int width,int height){
         super(context);
         this.x = x;
         super.setX(this.x);
@@ -29,28 +31,60 @@ public class Rover extends androidx.appcompat.widget.AppCompatImageView {
 
     public void executeCommand(Command command){
         Animation anim = command.executeCommand(this);
-        anim.setFillAfter(true);
         anim.setDuration(1000);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Rover.super.setX(x);
+                Rover.super.setY(y);
+                Rover.super.setRotation(angle - 270);
+                Rover.this.setAnimation(null);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         this.startAnimation(anim);
     }
 
     public void executeCommands(List<Command> commands){
-        AnimationSet set = new AnimationSet(true);
-        set.setFillAfter(true);
-        int start = 0;
-        for(Command command: commands){
-            Animation animation = command.executeCommand(this);
-            animation.setDuration(1000);
-            animation.setStartOffset(start);
-            start = start + 1000;
-            animation.setFillAfter(true);
-            set.addAnimation(animation);
-        }
-
-        this.startAnimation(set);
-
+        animate(commands,0);
     }
 
+    private void animate(List<Command> commands, int pos){
+        Animation animation = commands.get(pos).executeCommand(this);
+        animation.setDuration(1000);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Rover.super.setX(x);
+                Rover.super.setY(y);
+                Rover.super.setRotation(angle - 270);
+                if(pos+1<commands.size()){
+                    animate(commands,pos+1);
+                }
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        this.startAnimation(animation);
+    }
 
     public int getXR() {
         return this.x;

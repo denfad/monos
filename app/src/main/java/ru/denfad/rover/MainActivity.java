@@ -20,9 +20,8 @@ import ru.denfad.rover.map.Rover;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AbsoluteLayout map;
+    private Grid map;
     private ImageView roverImage;
-    private Grid grid;
     private int width,height;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
         //настройка карты
         map = findViewById(R.id.map);
-        map.post(new Runnable() {
-            @Override
-            public void run() {
-                width = map.getMeasuredWidth();
-                height = map.getMeasuredHeight();
-            }
-        });
 
         //создание сущности ровера
-        roverImage = new Rover(width/2,height/2,getApplicationContext(),200,200);
+        roverImage = new Rover(0,0,getApplicationContext(),map.roverWidth,map.roverHeight);
         roverImage.setImageResource(R.drawable.rover_image);
-
         map.addView(roverImage);
-        this.grid = new Grid((Rover)roverImage);
+        map.setRover((Rover)roverImage);
 
         //элементы упавления
         Button left = findViewById(R.id.left);
@@ -56,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //лево 180
-                grid.executeCommand(new RotateCommand(-90));
+                map.executeCommand(new RotateCommand(-90));
 
             }
         });
@@ -65,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //право 0
-                grid.executeCommand(new RotateCommand(90));
+                map.executeCommand(new RotateCommand(90));
 
             }
         });
@@ -74,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //вверх 270
-                grid.executeCommand(new MoveCommand(100));
+                map.executeCommand(new MoveCommand(113));
 
             }
         });
@@ -83,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //вниз 90
-                grid.executeCommand(new MoveCommand(-100));
+                map.executeCommand(new MoveCommand(-113));
 
             }
         });
@@ -96,13 +87,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button regenerate = findViewById(R.id.regenerate);
+        regenerate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map.regenerateObjects();
+            }
+        });
         if(!GlobalFields.getInstance().getCommands().isEmpty()){
-           grid.executeCommands(GlobalFields.getInstance().getCommands());
+           map.executeCommands(GlobalFields.getInstance().getCommands());
         }
     }
 
     public void updateGameMap(){
-        roverImage.setX(grid.getRover().getX());
-        roverImage.setY(grid.getRover().getY());
+        roverImage.setX(map.getRover().getX());
+        roverImage.setY(map.getRover().getY());
     }
 }

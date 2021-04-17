@@ -7,13 +7,13 @@
         tools:context=".MainActivity">
 
 
-    <AbsoluteLayout
+    <ru.denfad.rover.map.Grid
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#9C2804">
 
-    </AbsoluteLayout>
+    </ru.denfad.rover.map.Grid>
 
 
     <TableLayout
@@ -75,7 +75,17 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"/>
+
+    <Button
+            android:text="Сгенерировать заново"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/regenerate"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/codding"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp" />
 
 
 </RelativeLayout>
