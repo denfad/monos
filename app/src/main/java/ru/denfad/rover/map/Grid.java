@@ -26,7 +26,7 @@ public class Grid extends AbsoluteLayout {
         super(context,attrs);
         roverHeight = 113;
         roverWidth = 113;
-        generateObjects();
+        generateObjects(false);
 
     }
 
@@ -34,7 +34,7 @@ public class Grid extends AbsoluteLayout {
         super(context);
         roverHeight = 113;
         roverWidth =113;
-        generateObjects();
+        generateObjects(false);
     }
 
     @Override
@@ -78,25 +78,32 @@ public class Grid extends AbsoluteLayout {
         return rover;
     }
 
-    public void generateObjects(){
+    public void generateObjects(boolean isButton){
 
-        objects.clear();
-        Random random = new Random();
-        for(int i=0; i<width;i++){
-            int n = random.nextInt(100);
-            if(n<7){
-                Bitmap b = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.stone);
-                b = Bitmap.createScaledBitmap(b,roverWidth,roverHeight,false);
-                objects.add(new MapObject(i*roverWidth,random.nextInt(height)*roverHeight,b));
+        if(GlobalFields.getInstance().getMapObjects().isEmpty() || isButton ) {
+            objects.clear();
+            Random random = new Random();
+            for (int i = 0; i < width; i++) {
+                int n = random.nextInt(100);
+                if (n < 7) {
+                    Bitmap b = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.stone);
+                    b = Bitmap.createScaledBitmap(b, roverWidth, roverHeight, false);
+                    objects.add(new MapObject(i * roverWidth, random.nextInt(height) * roverHeight, b));
 
+                }
+                if (n >= 7 && n < 14) {
+                    Bitmap b = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.stone);
+                    b = Bitmap.createScaledBitmap(b, roverWidth * 3, roverHeight * 3, false);
+                    objects.add(new MapObject(i * roverWidth, random.nextInt(height) * roverHeight, b));
+
+                }
             }
-            if(n>=7 && n<14){
-                Bitmap b = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.stone);
-                b = Bitmap.createScaledBitmap(b,roverWidth*3,roverHeight*3,false);
-                objects.add(new MapObject(i*roverWidth,random.nextInt(height)*roverHeight,b));
-
-            }
+            GlobalFields.getInstance().setMapObjects(objects);
         }
+        else{
+            objects = GlobalFields.getInstance().getMapObjects();
+        }
+
     }
 
     public void drawObjects(Canvas canvas){
@@ -109,7 +116,7 @@ public class Grid extends AbsoluteLayout {
     }
 
     public void regenerateObjects(){
-        generateObjects();
+        generateObjects(true);
         invalidate();
     }
 

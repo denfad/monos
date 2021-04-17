@@ -1,7 +1,9 @@
 package ru.denfad.rover;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,6 +11,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +26,13 @@ import ru.denfad.rover.ui.MyListAdapter;
 public class ProgrammingActivity extends AppCompatActivity {
 
     private List<Command> commands = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.programming_activity);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ProgrammingActivity.this);
 
         GlobalFields.getInstance().getCommands().clear();
         RecyclerView list = findViewById(R.id.list);
@@ -49,6 +56,10 @@ public class ProgrammingActivity extends AppCompatActivity {
         Button start = findViewById(R.id.start);
         start.setOnClickListener(v -> {
             GlobalFields.getInstance().setCommands(commands);
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            String s = gsonBuilder.create().toJson(commands);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("commands"+commands.toString(),s).apply();
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
         });
     }
@@ -58,10 +69,10 @@ public class ProgrammingActivity extends AppCompatActivity {
         Command command = null;
         switch (commandS[0]){
             case "/forward":
-                command = new MoveCommand(Integer.valueOf(commandS[1]));
+                command = new MoveCommand(113*Integer.valueOf(commandS[1]));
                 break;
             case "/back":
-                command =new MoveCommand(-Integer.valueOf(commandS[1]));
+                command =new MoveCommand(-113*Integer.valueOf(commandS[1]));
                 break;
             case "/left":
                 command =new RotateCommand(-90);

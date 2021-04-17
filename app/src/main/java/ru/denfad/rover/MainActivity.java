@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import ru.denfad.rover.map.Command;
 import ru.denfad.rover.map.GlobalFields;
@@ -23,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
     private Grid map;
     private ImageView roverImage;
     private int width,height;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
         //настройка карты
         map = findViewById(R.id.map);
@@ -97,6 +104,10 @@ public class MainActivity extends AppCompatActivity {
         if(!GlobalFields.getInstance().getCommands().isEmpty()){
            map.executeCommands(GlobalFields.getInstance().getCommands());
         }
+
+        Spinner spin = findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.support_simple_spinner_dropdown_item);
+        spin.setAdapter(adapter);
     }
 
     public void updateGameMap(){
