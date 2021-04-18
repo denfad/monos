@@ -5,15 +5,23 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+import com.google.gson.GsonBuilder;
+
+import java.util.Arrays;
+import java.util.List;
 
 import ru.denfad.rover.map.Command;
 import ru.denfad.rover.map.GlobalFields;
@@ -38,17 +46,11 @@ public class MainActivity extends AppCompatActivity {
         //настройка карты
         map = findViewById(R.id.map);
 
-        //создание сущности ровера
-        roverImage = new Rover(0,0,getApplicationContext(),map.roverWidth,map.roverHeight);
-        roverImage.setImageResource(R.drawable.rover_image);
-        map.addView(roverImage);
-        map.setRover((Rover)roverImage);
-
         //элементы упавления
-        Button left = findViewById(R.id.left);
-        Button right = findViewById(R.id.right);
-        Button up = findViewById(R.id.up);
-        Button bottom = findViewById(R.id.bottom);
+        ImageButton left = findViewById(R.id.left);
+        ImageButton right = findViewById(R.id.right);
+        ImageButton up = findViewById(R.id.up);
+        ImageButton bottom = findViewById(R.id.bottom);
 
         left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //вверх 270
-                map.executeCommand(new MoveCommand(113));
+                map.executeCommand(new MoveCommand(GlobalFields.getInstance().getCellHeight()));
 
             }
         });
@@ -81,12 +83,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //вниз 90
-                map.executeCommand(new MoveCommand(-113));
+                map.executeCommand(new MoveCommand(-GlobalFields.getInstance().getCellHeight()));
 
             }
         });
 
-        Button codding = findViewById(R.id.codding);
+        ImageButton codding = findViewById(R.id.codding);
         codding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,20 +96,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button regenerate = findViewById(R.id.regenerate);
+        ImageButton regenerate = findViewById(R.id.regenerate);
         regenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 map.regenerateObjects();
             }
         });
+
+        ImageButton back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MenuActivity.class));
+            }
+        });
+
+        //создание сущности ровера
+        roverImage = new Rover(0,0,getApplicationContext(),map.cellWidth,map.cellHeight);
+        roverImage.setImageResource(R.drawable.rover);
+        map.addView(roverImage);
+        map.setRover((Rover)roverImage);
+
+
         if(!GlobalFields.getInstance().getCommands().isEmpty()){
            map.executeCommands(GlobalFields.getInstance().getCommands());
         }
 
-        Spinner spin = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.support_simple_spinner_dropdown_item);
-        spin.setAdapter(adapter);
+//        Spinner spin = findViewById(R.id.spinner);
+//        GsonBuilder gsonBuilder = new GsonBuilder();
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.support_simple_spinner_dropdown_item,gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class));
+//        spin.setAdapter(adapter);
+//
+//        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String[] programs = gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class);
+//                String c = sharedPreferences.getString(programs[position-1],"[]");
+//                List<Command> commands = Arrays.asList(gsonBuilder.create().fromJson(c,Command[].class));
+//                GlobalFields.getInstance().setCommands(commands);
+//                map.executeCommands(GlobalFields.getInstance().getCommands());
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
     }
 
     public void updateGameMap(){

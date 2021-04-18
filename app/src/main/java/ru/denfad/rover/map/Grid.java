@@ -17,24 +17,19 @@ import ru.denfad.rover.R;
 
 public class Grid extends AbsoluteLayout {
     private final int height =9,width = 16;
-    public int roverHeight,roverWidth;
+    public int cellHeight = GlobalFields.getInstance().getCellHeight(),cellWidth = GlobalFields.getInstance().getCellHeight();
     private Rover rover;
     private List<MapObject> objects = new ArrayList<>();
 
 
     public Grid(Context context, AttributeSet attrs){
         super(context,attrs);
-        roverHeight = 113;
-        roverWidth = 113;
-        generateObjects(false);
 
     }
 
     public Grid(Context context){
         super(context);
-        roverHeight = 113;
-        roverWidth =113;
-        generateObjects(false);
+
     }
 
     @Override
@@ -47,9 +42,11 @@ public class Grid extends AbsoluteLayout {
         paint.setStrokeWidth(3);
 
         int dy = super.getHeight() / height;
-        roverHeight = dy;
+        cellHeight = dy;
+        GlobalFields.getInstance().setCellHeight(dy);
         int dx = super.getWidth() / width;
-        roverWidth = dx;
+        cellWidth = dx;
+        GlobalFields.getInstance().setCellWidth(dx);
         for(int i = 0; i<height;i++){
             canvas.drawLine(0,i*dy,super.getWidth(),i*dy,paint);
         }
@@ -57,6 +54,7 @@ public class Grid extends AbsoluteLayout {
             canvas.drawLine(i*dx,0,i*dx,super.getHeight(),paint);
         }
 
+        generateObjects(false);
         drawObjects(canvas);
     }
 
@@ -86,15 +84,28 @@ public class Grid extends AbsoluteLayout {
             for (int i = 0; i < width; i++) {
                 int n = random.nextInt(100);
                 if (n < 7) {
-                    Bitmap b = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.stone);
-                    b = Bitmap.createScaledBitmap(b, roverWidth, roverHeight, false);
-                    objects.add(new MapObject(i * roverWidth, random.nextInt(height) * roverHeight, b));
+                    Bitmap b = Bitmap.createBitmap(cellWidth, cellHeight, Bitmap.Config.ARGB_8888);
+                    b.eraseColor(getContext().getColor(R.color.stone));
+                    int x = i * cellWidth;
+                    int y  =random.nextInt(height) * cellHeight;
+                    if(checkObject(x)) objects.add(new MapObject(x, y, b));
 
                 }
                 if (n >= 7 && n < 14) {
-                    Bitmap b = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.stone);
-                    b = Bitmap.createScaledBitmap(b, roverWidth * 3, roverHeight * 3, false);
-                    objects.add(new MapObject(i * roverWidth, random.nextInt(height) * roverHeight, b));
+                    Bitmap b = Bitmap.createBitmap(cellWidth*2, cellHeight*2, Bitmap.Config.ARGB_8888);
+                    b.eraseColor(getContext().getColor(R.color.big_stone));
+                    int x = i * cellWidth;
+                    int y  =random.nextInt(height) * cellHeight;
+                    if(checkObject(x)) objects.add(new MapObject(x, y, b));
+
+                }
+
+                if (n >= 14 && n < 20) {
+                    Bitmap b = Bitmap.createBitmap(cellWidth*4, cellHeight*5, Bitmap.Config.ARGB_8888);
+                    b.eraseColor(getContext().getColor(R.color.plato));
+                    int x = i * cellWidth;
+                    int y  =random.nextInt(height) * cellHeight;
+                    if(checkObject(x)) objects.add(new MapObject(x, y, b));
 
                 }
             }
@@ -118,6 +129,17 @@ public class Grid extends AbsoluteLayout {
     public void regenerateObjects(){
         generateObjects(true);
         invalidate();
+    }
+
+    public boolean checkObject(int x){
+        boolean b = true;
+        for(MapObject ob: objects){
+          if(ob.x + ob.width > x) {
+              b = false;
+              break;
+          }
+        }
+        return b;
     }
 
 }

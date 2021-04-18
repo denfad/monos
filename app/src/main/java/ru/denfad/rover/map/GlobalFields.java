@@ -5,6 +5,7 @@ import java.util.List;
 
 public class GlobalFields {
     private static GlobalFields instance;
+    private int cellHeight=113, cellWidth = 113;
     private List<Command> commands;
     private List<MapObject> mapObjects;
     private GlobalFields(){
@@ -37,5 +38,21 @@ public class GlobalFields {
 
     public void setMapObjects(List<MapObject> mapObjects) {
         this.mapObjects = mapObjects;
+    }
+
+    public int getCellHeight() {
+        return cellHeight;
+    }
+
+    public void setCellHeight(int cellHeight) {
+        this.cellHeight = cellHeight;
+    }
+
+    public int getCellWidth() {
+        return cellWidth;
+    }
+
+    public void setCellWidth(int cellWidth) {
+        this.cellWidth = cellWidth;
     }
 }

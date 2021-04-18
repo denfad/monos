@@ -12,6 +12,7 @@ import java.util.List;
 
 import ru.denfad.rover.R;
 import ru.denfad.rover.map.Command;
+import ru.denfad.rover.map.GlobalFields;
 import ru.denfad.rover.map.MoveCommand;
 import ru.denfad.rover.map.RotateCommand;
 
@@ -56,11 +57,11 @@ public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                MoveViewHolder c2 = (MoveViewHolder) holder;
                if(((MoveCommand)commands.get(position)).getDistance() < 0){
                    c2.angle.setText("Назад");
-                   c2.distance.setText(String.valueOf(-((MoveCommand)commands.get(position)).getDistance()));
+                   c2.distance.setText(String.valueOf(-((MoveCommand)commands.get(position)).getDistance()/ GlobalFields.getInstance().getCellHeight()));
                }
                else{
                    c2.angle.setText("Вперед");
-                   c2.distance.setText(String.valueOf(((MoveCommand)commands.get(position)).getDistance()));
+                   c2.distance.setText(String.valueOf(((MoveCommand)commands.get(position)).getDistance()/ GlobalFields.getInstance().getCellHeight()));
                }
        }
     }
