@@ -6,6 +6,11 @@ import android.widget.ImageView;
 
 public class RotateCommand implements Command {
     private int dangle;
+    private String TypeName = "RotateCommand";
+
+    public RotateCommand(int dangle, String TypeName){
+        this.dangle = dangle;
+    }
 
     public RotateCommand(int dangle){
         this.dangle = dangle;

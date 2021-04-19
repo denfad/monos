@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ru.denfad.rover.json.CommandDeserializer;
 import ru.denfad.rover.map.Command;
 import ru.denfad.rover.map.GlobalFields;
 import ru.denfad.rover.map.MoveCommand;
@@ -39,12 +40,13 @@ public class ProgrammingActivity extends AppCompatActivity {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ProgrammingActivity.this);
 
-        GlobalFields.getInstance().getCommands().clear();
         RecyclerView list = findViewById(R.id.list);
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         list.setLayoutManager(llm);
         MyListAdapter adapter = new MyListAdapter(commands);
         list.setAdapter(adapter);
+
+        GlobalFields.getInstance().getCommands().clear();
 
         EditText console = findViewById(R.id.command_line);
         console.setOnKeyListener(new View.OnKeyListener() {
@@ -63,20 +65,34 @@ public class ProgrammingActivity extends AppCompatActivity {
             }
         });
 
+        Button add = findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Command c = getCommand(console.getText().toString());
+                if(c != null){
+                    commands.add(c);
+                }
+                adapter.notifyDataSetChanged();
+                list.scrollToPosition(commands.size()-1);
+                console.setText(null);
+            }
+        });
+
 
         EditText name = findViewById(R.id.name_line);
 
         ImageButton start = findViewById(R.id.start);
         start.setOnClickListener(v -> {
             GlobalFields.getInstance().setCommands(commands);
-//            GsonBuilder gsonBuilder = new GsonBuilder();
-//            String s = gsonBuilder.create().toJson(commands);
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
-//            List<String> programs = new ArrayList<>(Arrays.asList(gsonBuilder.create().fromJson(sharedPreferences.getString("programs", "[]"), String[].class)));
-//            programs.add(name.getText().toString());
-//            editor.putString(name.getText().toString(),s).apply();
-//            s = gsonBuilder.create().toJson(programs);
-//            editor.putString("programs",s).apply();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            String s = gsonBuilder.create().toJson(commands);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            List<String> programs = new ArrayList<>(Arrays.asList(gsonBuilder.create().fromJson(sharedPreferences.getString("programs", "[]"), String[].class)));
+            programs.add(name.getText().toString());
+            editor.putString(name.getText().toString(),s).apply();
+            s = gsonBuilder.create().toJson(programs);
+            editor.putString("programs",s).apply();
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
         });
 

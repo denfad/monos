@@ -9,6 +9,11 @@ import java.util.concurrent.TimeUnit;
 public class MoveCommand implements Command {
 
     private int distance;
+    private String TypeName = "MoveCommand";
+
+    public MoveCommand(int distance,String TypeName){
+        this.distance = distance;
+    }
 
     public MoveCommand(int distance){
         this.distance = distance;

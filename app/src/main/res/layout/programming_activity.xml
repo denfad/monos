@@ -22,35 +22,53 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="5dp"
+            android:background="@drawable/title"
             android:elevation="2dp">
 
         <EditText
                 android:id="@+id/command_line"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:hint="/your command"
+                android:layout_gravity="center"
                 android:textColorHint="#63FFFFFF"
-                android:layout_marginBottom="10dp"
-                android:layout_marginHorizontal="5dp"
                 android:paddingHorizontal="35dp"
-                android:background="@drawable/title"
+                android:background="#00FFFFFF"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:maxLines="1"/>
 
+        <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/add"
+                android:text="add"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:background="#00FFFFFF"
+                android:textColor="@color/white"/>
 
     </LinearLayout>
 
 
     <EditText
             android:id="@+id/name_line"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="6"
-            android:visibility="invisible"
-            android:hint="Название программы" />
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:hint="название программы"
+            android:textColorHint="#63FFFFFF"
+            android:paddingHorizontal="35dp"
+            android:layout_toStartOf="@+id/back"
+            android:background="@drawable/title"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp" />
 
 
     <ImageButton

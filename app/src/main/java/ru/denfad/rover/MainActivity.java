@@ -23,12 +23,14 @@ import com.google.gson.GsonBuilder;
 import java.util.Arrays;
 import java.util.List;
 
+import ru.denfad.rover.json.CommandDeserializer;
 import ru.denfad.rover.map.Command;
 import ru.denfad.rover.map.GlobalFields;
 import ru.denfad.rover.map.Grid;
 import ru.denfad.rover.map.MoveCommand;
 import ru.denfad.rover.map.RotateCommand;
 import ru.denfad.rover.map.Rover;
+import ru.denfad.rover.ui.NoDefaultSpinner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -123,26 +125,32 @@ public class MainActivity extends AppCompatActivity {
            map.executeCommands(GlobalFields.getInstance().getCommands());
         }
 
-//        Spinner spin = findViewById(R.id.spinner);
-//        GsonBuilder gsonBuilder = new GsonBuilder();
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.support_simple_spinner_dropdown_item,gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class));
-//        spin.setAdapter(adapter);
-//
-//        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String[] programs = gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class);
-//                String c = sharedPreferences.getString(programs[position-1],"[]");
-//                List<Command> commands = Arrays.asList(gsonBuilder.create().fromJson(c,Command[].class));
-//                GlobalFields.getInstance().setCommands(commands);
-//                map.executeCommands(GlobalFields.getInstance().getCommands());
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+        NoDefaultSpinner spin = findViewById(R.id.spinner);
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Command.class, new CommandDeserializer());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.support_simple_spinner_dropdown_item,gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class));
+        spin.setAdapter(adapter);
+
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    map.backRover();
+
+                    String[] programs = gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class);
+                    System.out.println(programs[position]);
+                    String c = sharedPreferences.getString(programs[position],"[]");
+                    System.out.println(c);
+                    List<Command> commands = Arrays.asList(gsonBuilder.create().fromJson(c,Command[].class));
+                    System.out.println(Arrays.toString(commands.toArray()));
+                    GlobalFields.getInstance().setCommands(commands);
+                    map.executeCommands(GlobalFields.getInstance().getCommands());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void updateGameMap(){

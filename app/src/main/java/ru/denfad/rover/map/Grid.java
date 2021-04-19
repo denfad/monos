@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.AbsoluteLayout;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class Grid extends AbsoluteLayout {
     public int cellHeight = GlobalFields.getInstance().getCellHeight(),cellWidth = GlobalFields.getInstance().getCellHeight();
     private Rover rover;
     private List<MapObject> objects = new ArrayList<>();
+    private int baseRoverX,baseRoverY;
 
 
     public Grid(Context context, AttributeSet attrs){
@@ -59,6 +61,8 @@ public class Grid extends AbsoluteLayout {
     }
 
     public void setRover(Rover rover){
+        baseRoverX = (int)rover.getX();
+        baseRoverY = (int)rover.getY();
         this.rover = rover;
     }
 
@@ -70,6 +74,15 @@ public class Grid extends AbsoluteLayout {
     public Rover executeCommands(List<Command> commands){
         rover.executeCommands(commands);
         return rover;
+    }
+
+    public void backRover(){
+        rover.setX(baseRoverX);
+        rover.setY(baseRoverY);
+        rover.setAngle(270);
+        ((ImageView)rover).setX(baseRoverX);
+        ((ImageView)rover).setY(baseRoverY);
+        ((ImageView)rover).setRotation(0);
     }
 
     public Rover getRover(){

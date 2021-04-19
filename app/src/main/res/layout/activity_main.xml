@@ -124,5 +124,15 @@
             android:background="@drawable/rectangle"
             android:padding="5dp"/>
 
+    <ru.denfad.rover.ui.NoDefaultSpinner
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:id="@+id/spinner"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/back"
+            android:background="@drawable/title"
+            android:padding="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp" />
 
 </RelativeLayout>

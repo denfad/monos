@@ -47,20 +47,20 @@ public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
            case 1:
                RotateViewHolder c1 = (RotateViewHolder) holder;
                if(((RotateCommand)commands.get(position)).getDangle() == 90){
-                   c1.angle.setText("Поворот направо");
+                   c1.angle.setText("RIGHT");
                }
                else{
-                   c1.angle.setText("Поворот налево");
+                   c1.angle.setText("LEFT");
                }
                break;
            case 2:
                MoveViewHolder c2 = (MoveViewHolder) holder;
                if(((MoveCommand)commands.get(position)).getDistance() < 0){
-                   c2.angle.setText("Назад");
+                   c2.angle.setText("BACK");
                    c2.distance.setText(String.valueOf(-((MoveCommand)commands.get(position)).getDistance()/ GlobalFields.getInstance().getCellHeight()));
                }
                else{
-                   c2.angle.setText("Вперед");
+                   c2.angle.setText("FORWARD");
                    c2.distance.setText(String.valueOf(((MoveCommand)commands.get(position)).getDistance()/ GlobalFields.getInstance().getCellHeight()));
                }
        }
