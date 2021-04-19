@@ -125,25 +125,29 @@ public class MainActivity extends AppCompatActivity {
            map.executeCommands(GlobalFields.getInstance().getCommands());
         }
 
-        NoDefaultSpinner spin = findViewById(R.id.spinner);
+        Spinner spin = findViewById(R.id.spinner);
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Command.class, new CommandDeserializer());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.support_simple_spinner_dropdown_item,gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.spinner_item,gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class));
         spin.setAdapter(adapter);
 
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    map.backRover();
-
-                    String[] programs = gsonBuilder.create().fromJson(sharedPreferences.getString("programs","[]"),String[].class);
-                    System.out.println(programs[position]);
-                    String c = sharedPreferences.getString(programs[position],"[]");
-                    System.out.println(c);
-                    List<Command> commands = Arrays.asList(gsonBuilder.create().fromJson(c,Command[].class));
-                    System.out.println(Arrays.toString(commands.toArray()));
-                    GlobalFields.getInstance().setCommands(commands);
-                    map.executeCommands(GlobalFields.getInstance().getCommands());
+                    try {
+                        map.backRover();
+                        String[] programs = gsonBuilder.create().fromJson(sharedPreferences.getString("programs", "[]"), String[].class);
+                        System.out.println(programs[position]);
+                        String c = sharedPreferences.getString(programs[position], "[]");
+                        System.out.println(c);
+                        List<Command> commands = Arrays.asList(gsonBuilder.create().fromJson(c, Command[].class));
+                        System.out.println(Arrays.toString(commands.toArray()));
+                        GlobalFields.getInstance().setCommands(commands);
+                        map.executeCommands(GlobalFields.getInstance().getCommands());
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
             }
 
             @Override
