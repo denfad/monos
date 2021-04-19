@@ -29,5 +29,13 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),ProgrammingActivity.class));
             }
         });
+
+        Button help = findViewById(R.id.help);
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),HelpActivity.class));
+            }
+        });
     }
 }
