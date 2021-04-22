@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 
@@ -37,6 +38,7 @@ public class Grid extends AbsoluteLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);

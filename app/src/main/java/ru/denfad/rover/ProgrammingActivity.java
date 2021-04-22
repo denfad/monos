@@ -46,7 +46,7 @@ public class ProgrammingActivity extends AppCompatActivity {
         MyListAdapter adapter = new MyListAdapter(commands);
         list.setAdapter(adapter);
 
-        GlobalFields.getInstance().getCommands().clear();
+        GlobalFields.getInstance().clearCommands();
 
         EditText console = findViewById(R.id.command_line);
         console.setOnKeyListener(new View.OnKeyListener() {

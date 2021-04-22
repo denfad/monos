@@ -55,4 +55,11 @@ public class GlobalFields {
     public void setCellWidth(int cellWidth) {
         this.cellWidth = cellWidth;
     }
+
+    public void clearCommands(){
+        if(commands != null){
+            commands.clear();
+        }
+
+    }
 }

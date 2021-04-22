@@ -20,6 +20,7 @@ import android.widget.Spinner;
 
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println(programs[position]);
                         String c = sharedPreferences.getString(programs[position], "[]");
                         System.out.println(c);
-                        List<Command> commands = Arrays.asList(gsonBuilder.create().fromJson(c, Command[].class));
+                        List<Command> commands = new ArrayList<>(Arrays.asList(gsonBuilder.create().fromJson(c, Command[].class)));
                         System.out.println(Arrays.toString(commands.toArray()));
                         GlobalFields.getInstance().setCommands(commands);
                         map.executeCommands(GlobalFields.getInstance().getCommands());
