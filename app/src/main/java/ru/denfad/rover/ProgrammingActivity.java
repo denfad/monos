@@ -23,8 +23,11 @@ import java.util.List;
 import ru.denfad.rover.json.CommandDeserializer;
 import ru.denfad.rover.map.Command;
 import ru.denfad.rover.map.GlobalFields;
+import ru.denfad.rover.map.Interpreter;
 import ru.denfad.rover.map.MoveCommand;
 import ru.denfad.rover.map.RotateCommand;
+import ru.denfad.rover.map.StartCycleCommand;
+import ru.denfad.rover.map.StopCycleCommand;
 import ru.denfad.rover.ui.MyListAdapter;
 
 import static android.view.KeyEvent.KEYCODE_ENTER;
@@ -84,6 +87,8 @@ public class ProgrammingActivity extends AppCompatActivity {
 
         ImageButton start = findViewById(R.id.start);
         start.setOnClickListener(v -> {
+            commands = Interpreter.interpreter(commands);
+            System.out.println(Arrays.asList(commands));
             GlobalFields.getInstance().setCommands(commands);
             GsonBuilder gsonBuilder = new GsonBuilder();
             String s = gsonBuilder.create().toJson(commands);
@@ -123,6 +128,12 @@ public class ProgrammingActivity extends AppCompatActivity {
                 break;
             case "/delete":
                 commands.remove(commands.size()-1);
+                break;
+            case "/cycle":
+                command =new StartCycleCommand(Integer.valueOf(commandS[1]));
+                break;
+            case "/stop":
+                command =new StopCycleCommand();
                 break;
         }
         return command;

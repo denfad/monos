@@ -15,6 +15,7 @@ import ru.denfad.rover.map.Command;
 import ru.denfad.rover.map.GlobalFields;
 import ru.denfad.rover.map.MoveCommand;
 import ru.denfad.rover.map.RotateCommand;
+import ru.denfad.rover.map.StartCycleCommand;
 
 public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -29,11 +30,17 @@ public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType){
             case 1:
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_rotate, parent, false);
-                return new RotateViewHolder(v);
+                View v1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_rotate, parent, false);
+                return new RotateViewHolder(v1);
             case 2:
-                View V = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_move, parent, false);
-                return  new MoveViewHolder(V);
+                View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_move, parent, false);
+                return  new MoveViewHolder(v2);
+            case 3:
+                View v3 = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_start_cycle, parent, false);
+                return  new StartCycleViewHolder(v3);
+            case 4:
+                View v4 = LayoutInflater.from(parent.getContext()).inflate(R.layout.programming_item_stop_cycle, parent, false);
+                return  new StopCycleViewHolder(v4);
             default:
                 return null;
 
@@ -63,6 +70,11 @@ public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                    c2.angle.setText("FORWARD");
                    c2.distance.setText(String.valueOf(((MoveCommand)commands.get(position)).getDistance()/ GlobalFields.getInstance().getCellHeight()));
                }
+               break;
+           case 3:
+               StartCycleViewHolder c3 = (StartCycleViewHolder) holder;
+               c3.count.setText(String.valueOf(((StartCycleCommand)commands.get(position)).getCount()));
+               break;
        }
     }
 
@@ -71,8 +83,14 @@ public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(commands.get(position) instanceof RotateCommand){
             return 1;
         }
-        else{
+        else if(commands.get(position) instanceof MoveCommand){
             return 2;
+        }
+        else if(commands.get(position) instanceof StartCycleCommand){
+            return 3;
+        }
+        else{
+            return 4;
         }
     }
 
@@ -108,6 +126,24 @@ public class MyListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             angle = itemView.findViewById(R.id.angle);
             distance = itemView.findViewById(R.id.distance);
+        }
+    }
+
+    public static class StartCycleViewHolder extends RecyclerView.ViewHolder {
+
+        TextView count;
+
+        StartCycleViewHolder(View itemView) {
+            super(itemView);
+            count = itemView.findViewById(R.id.count);
+        }
+    }
+    public static class StopCycleViewHolder extends RecyclerView.ViewHolder {
+
+
+
+        StopCycleViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
